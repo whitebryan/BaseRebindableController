@@ -10,11 +10,12 @@
 #include "InputMappingContext.h"
 #include "KeybindsSaveFile.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h" 
 
 void ABaseRebindableController::OnPossess(APawn* NewPawn)
 {
 	Super::OnPossess(NewPawn);
-	PossessedCharacter = Cast<CHARACTER_CLASS>(NewPawn);
+	PossessedCharacter = Cast<ABaseCharacter>(NewPawn);
 	SetupInputs();
 }
 
@@ -69,7 +70,7 @@ void ABaseRebindableController::SetupInputs()
 }
 
 //key rebinding
-bool ABaseRebindableController::rebindKey(const FName mappingToChange, FKey newKey, bool ignoreDuplicateKey)
+bool ABaseRebindableController::rebindKey(const FName mappingToChange, FInputChord newChord, bool ignoreDuplicateKey)
 {
 	//Get all actions
 	TArray<FEnhancedActionKeyMapping> playerMappableKeys = PlayerInputMappingContext->GetMappings();
@@ -80,7 +81,7 @@ bool ABaseRebindableController::rebindKey(const FName mappingToChange, FKey newK
 	//Check to make sure the key isnt alreayd in use and find the index of the action we need
 	for (int i = 0; i < playerMappableKeys.Num(); ++i)
 	{
-		if (!ignoreDuplicateKey && playerMappableKeys[i].Key == newKey)
+		if (!ignoreDuplicateKey && playerMappableKeys[i].Key == newChord.Key)
 		{
 			return false;
 		}
@@ -92,9 +93,9 @@ bool ABaseRebindableController::rebindKey(const FName mappingToChange, FKey newK
 
 	
 	//Actually change the mapping then request a rebuild and save
-	if (actionToChange->PlayerMappableOptions.Name == mappingToChange)
+	if (actionToChange != nullptr && actionToChange->PlayerMappableOptions.Name == mappingToChange)
 	{
-		actionToChange->Key = newKey;
+		actionToChange->Key = newChord.Key;
 		UEnhancedInputLibrary::RequestRebuildControlMappingsUsingContext(PlayerInputMappingContext);
 
 		saveKeybinds();
@@ -184,5 +185,13 @@ void ABaseRebindableController::JumpAction(const FInputActionValue& Value)
 	if (PossessedCharacter)
 	{
 		PossessedCharacter->JumpAction(Value.Get<bool>());
+	}
+}
+
+void ABaseRebindableController::MenuAction(const FInputActionValue& Value)
+{
+	if (PossessedCharacter)
+	{
+		PossessedCharacter->MenuAction();
 	}
 }

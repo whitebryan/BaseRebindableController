@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "Framework/Commands/InputChord.h" 
 #include "KeybindsSaveFile.generated.h"
 
 UCLASS()

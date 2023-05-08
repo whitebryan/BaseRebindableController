@@ -8,10 +8,9 @@
 #include "PlayerMappableInputConfig.h"
 #include "BaseRebindableController.generated.h"
 
-#define CHARACTER_CLASS ABaseCharacter
-
+struct FInputChord;
 class UInputMappingContext;
-class CHARACTER_CLASS;
+class ABaseCharacter;
 
 UCLASS(Blueprintable, BlueprintType)
 class BASECONTROLLER_API ABaseRebindableController : public APlayerController
@@ -25,7 +24,7 @@ public:
 	virtual void BindActions(UInputMappingContext* Context);
 
 	UFUNCTION(BlueprintCallable)
-	bool rebindKey(const FName mappingToChange, FKey newKey, bool ignoreDuplicateKey = false);
+	bool rebindKey(const FName mappingToChange, FInputChord newChord, bool ignoreDuplicateKey = false);
 	UFUNCTION(BlueprintCallable)
 	void resetKeybindsToDefault();
 
@@ -42,6 +41,9 @@ protected:
 	UFUNCTION()
 	void JumpAction(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void MenuAction(const FInputActionValue& Value);
+
 	void saveKeybinds();
 	void loadKeybinds();
 
@@ -49,7 +51,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	FString keybindSaveSlotName = "Keybinds";
 
-	TObjectPtr<CHARACTER_CLASS> PossessedCharacter = nullptr;
+	TObjectPtr<ABaseCharacter> PossessedCharacter = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UInputMappingContext> PlayerInputMappingContext = nullptr;

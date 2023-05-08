@@ -27,19 +27,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UUserWidget* menuWidget;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	//Basic controller functions
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	virtual void MoveAction(FVector2D Value);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	virtual void CameraAction(FVector2D Value);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	virtual void JumpAction(bool isJumping);
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	virtual void MenuAction();
+	UFUNCTION(BlueprintImplementableEvent)
+	void toggleMenu();
+
 
 };
