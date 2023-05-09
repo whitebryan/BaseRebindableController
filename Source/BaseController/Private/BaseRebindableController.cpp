@@ -117,6 +117,7 @@ void ABaseRebindableController::saveKeybinds()
 		//Add all mappable actions and their keys to a map then save it
 		for (FEnhancedActionKeyMapping curMapping : playerMappableKeys)
 		{
+			//If using UE 5.X < 5.2 change to curMapping.bIsPlayerMappable
 			if (curMapping.IsPlayerMappable())
 			{
 				playerSaveGame->inputMap.Add(curMapping.PlayerMappableOptions.Name, curMapping.Key);

@@ -1,4 +1,7 @@
 # BaseRebindableController
+ Only tested in unreal 5.1.1 and unreal 5.2 but should workd in any 5+ version
+ Line 120 of BaseRebindableController.cpp needs to be changed to curMapping.bIsPlayerMappable if version is lower than 5.2
+
  Basic rebindable player controller for UE5 using enhanced input
  Comes with simple UI to show how it can work
  Saves and loads keybinds automatically, saves to "Keybinds" slot
