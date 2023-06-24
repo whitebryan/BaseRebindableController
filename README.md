@@ -12,7 +12,7 @@
  TO USE:
  1. Drop into plugins
  2. Create a child C++ or Blueprint class of BaseCharacter
- 3. Create a child C++ or Blueprint class of BaseController
+ 3. Create a child C++ or Blueprint class of BaseRebindableController
  4. Migrate the Blueprints/Input folder to your projects content folder or just make new InputMappingContexts
  5. Add your contexts to the child of BaseController 
  6. Set your gamemode to use your new character and controller 
