@@ -24,11 +24,11 @@ TO ADD NEW ACTIONS:
 
 IF C++:
 
-2. Inside the header of your child of BaseController add a UFUNCTION() named Exactly the same as the InputAction
+2. Inside the header of your child of BaseRebindableController add a UFUNCTION() named Exactly the same as the InputAction
 3. Inside the cpp file define the function
 4. Cast "PossessedCharacter" to your child of BaseCharacter and call whatever you need on BaseCharacter
 
 IF BLUEPRINT:
 
-2. Inside your child of either BaseController or BaseCharacter right click and add the new input action 
+2. Inside your child of either BaseRebindableController or BaseCharacter right click and add the new input action 
 
