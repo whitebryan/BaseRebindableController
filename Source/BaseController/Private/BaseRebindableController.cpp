@@ -86,7 +86,7 @@ bool ABaseRebindableController::rebindKey(const FName mappingToChange, FInputCho
 		{
 			return false;
 		}
-		else if (playerKeySettings->Name == mappingToChange)
+		else if (playerKeySettings != nullptr && playerKeySettings->Name == mappingToChange)
 		{
 			actionToChange = &PlayerInputMappingContext->GetMapping(i);
 		}
