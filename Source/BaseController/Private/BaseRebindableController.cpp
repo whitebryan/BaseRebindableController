@@ -6,7 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputLibrary.h" 
 #include "Engine/LocalPlayer.h"
-#include "Engine/Public/SubSystems/LocalPlayerSubsystem.h"
+#include "PlayerMappableKeySettings.h"
 #include "InputMappingContext.h"
 #include "KeybindsSaveFile.h"
 #include "Kismet/GameplayStatics.h"
@@ -81,11 +81,12 @@ bool ABaseRebindableController::rebindKey(const FName mappingToChange, FInputCho
 	//Check to make sure the key isnt alreayd in use and find the index of the action we need
 	for (int i = 0; i < playerMappableKeys.Num(); ++i)
 	{
+		UPlayerMappableKeySettings* playerKeySettings = playerMappableKeys[i].GetPlayerMappableKeySettings();
 		if (!ignoreDuplicateKey && playerMappableKeys[i].Key == newChord.Key)
 		{
 			return false;
 		}
-		else if (playerMappableKeys[i].PlayerMappableOptions.Name == mappingToChange)
+		else if (playerKeySettings->Name == mappingToChange)
 		{
 			actionToChange = &PlayerInputMappingContext->GetMapping(i);
 		}
@@ -93,7 +94,7 @@ bool ABaseRebindableController::rebindKey(const FName mappingToChange, FInputCho
 
 	
 	//Actually change the mapping then request a rebuild and save
-	if (actionToChange != nullptr && actionToChange->PlayerMappableOptions.Name == mappingToChange)
+	if (actionToChange != nullptr)
 	{
 		actionToChange->Key = newChord.Key;
 		UEnhancedInputLibrary::RequestRebuildControlMappingsUsingContext(PlayerInputMappingContext);
@@ -120,7 +121,7 @@ void ABaseRebindableController::saveKeybinds()
 			//If using UE 5.X < 5.2 change to curMapping.bIsPlayerMappable
 			if (curMapping.IsPlayerMappable())
 			{
-				playerSaveGame->inputMap.Add(curMapping.PlayerMappableOptions.Name, curMapping.Key);
+				playerSaveGame->inputMap.Add(curMapping.GetPlayerMappableKeySettings()->Name, curMapping.Key);
 			}
 		}
 	}
@@ -151,11 +152,13 @@ void ABaseRebindableController::resetKeybindsToDefault()
 
 	for (int i = 0; i < playerMappedKeys.Num(); ++i)
 	{
+		UPlayerMappableKeySettings* playerKeySettings = playerMappedKeys[i].GetPlayerMappableKeySettings();
 		for (int j = 0; j < defaultMappedKeys.Num(); ++j)
 		{
-			if (playerMappedKeys[i].PlayerMappableOptions.Name == defaultMappedKeys[j].PlayerMappableOptions.Name)
+			UPlayerMappableKeySettings* defaultKeySettings = defaultMappedKeys[j].GetPlayerMappableKeySettings();
+			if (playerKeySettings != nullptr && defaultKeySettings != nullptr && playerKeySettings->Name == defaultKeySettings->Name)
 			{
-				rebindKey(playerMappedKeys[i].PlayerMappableOptions.Name, defaultMappedKeys[j].Key, true);
+				rebindKey(playerKeySettings->Name, defaultMappedKeys[j].Key, true);
 				break;
 			}
 		}
